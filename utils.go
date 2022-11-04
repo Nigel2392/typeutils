@@ -4,15 +4,11 @@ import (
 	"fmt"
 )
 
-type CanContain interface {
-	comparable
-}
-
 type BasicNums interface {
 	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
-func Contains[T CanContain](arr []T, item T) bool {
+func Contains[T comparable](arr []T, item T) bool {
 	for _, v := range arr {
 		if v == item {
 			return true
@@ -43,7 +39,7 @@ func ToByteFormat[T BasicNums](num T) string {
 	return fmt.Sprintf("%.2f %s", number, unit)
 }
 
-func ChunkSlice[T CanContain](slice []T, chunkSize int) [][]T {
+func ChunkSlice[T comparable](slice []T, chunkSize int) [][]T {
 	var chunks [][]T
 	for {
 		if len(slice) == 0 {
