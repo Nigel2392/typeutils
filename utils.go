@@ -1,13 +1,15 @@
 package typeutils
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 )
 
 type CanContain interface {
-	int | string | rune | byte | float32 | float64 | bool | complex64 | complex128 | int8 | int16 | int64 | uint | uint16 | uint32 | uint64 | uintptr
+	comparable
+}
+
+type BasicNums interface {
+	int | int8 | int16 | int32 | int64 | float32 | float64 | uint | uint8 | uint16 | uint32 | uint64
 }
 
 func Contains[T CanContain](arr []T, item T) bool {
@@ -19,39 +21,26 @@ func Contains[T CanContain](arr []T, item T) bool {
 	return false
 }
 
-func PadLeft(str string, length int, pad string) string {
-	if len(str) >= length {
-		return str
+func ToByteFormat[T BasicNums](num T) string {
+	number := float64(num)
+	var unit string
+	switch {
+	case number >= 1024*1024*1024*1024:
+		number /= 1024 * 1024 * 1024 * 1024
+		unit = "TB"
+	case number >= 1024*1024*1024:
+		number /= 1024 * 1024 * 1024
+		unit = "GB"
+	case number >= 1024*1024:
+		number /= 1024 * 1024
+		unit = "MB"
+	case number >= 1024:
+		number /= 1024
+		unit = "KB"
+	default:
+		unit = "B"
 	}
-	return PadLeft(pad+str, length, pad)
-}
-func PadRight(str string, length int, pad string) string {
-	if len(str) >= length {
-		return str
-	}
-	return PadRight(str+pad, length, pad)
-}
-
-func Repeat(str string, count int) string {
-	if count <= 0 {
-		return ""
-	}
-	return str + Repeat(str, count-1)
-}
-
-func Ask(question string) string {
-	var input string
-	fmt.Print(question)
-	// Scan until enter is pressed
-	std := bufio.NewScanner(os.Stdin)
-	std.Scan()
-	input = std.Text()
-	return input
-}
-
-func ToMegaBytes(bytes int) float64 {
-	num := float64(bytes) / 1000000
-	return float64(int(num*1000)) / 1000
+	return fmt.Sprintf("%.2f %s", number, unit)
 }
 
 func ChunkSlice[T CanContain](slice []T, chunkSize int) [][]T {
