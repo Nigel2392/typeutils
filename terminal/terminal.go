@@ -9,13 +9,18 @@ import (
 	"golang.org/x/term"
 )
 
-func Ask(question string) string {
+func Ask(question string, allowempty ...bool) string {
 	var input string
 	fmt.Print(question)
 	// Scan until enter is pressed
 	std := bufio.NewScanner(os.Stdin)
 	std.Scan()
 	input = std.Text()
+	if len(allowempty) > 0 && allowempty[0] {
+		return input
+	} else if len(allowempty) > 0 && !allowempty[0] && input == "" {
+		return Ask(question)
+	}
 	return input
 }
 
