@@ -19,15 +19,30 @@ func Ask(question string, args ...any) string {
 			answer := ask(question)
 			if answer == "" {
 				return Ask(question, args...)
+			} else if strings.EqualFold(answer, "exit") {
+				os.Exit(0)
 			}
 			return answer
 		} else {
-			return ask(question)
+			q := ask(question)
+			// If the answer is empty, ask again
+			// If the answer is exit, exit the program
+			switch q {
+			case "exit":
+				os.Exit(0)
+			}
+			return q
 		}
 	case 2:
 		canBeEmpty := args[0].(bool)
 		errmsg := args[1].(string)
 		answer := ask(question)
+		// If the answer is empty, ask again
+		// If the answer is exit, exit the program
+		switch question {
+		case "exit":
+			os.Exit(0)
+		}
 		if answer == "" {
 			if canBeEmpty {
 				return answer
