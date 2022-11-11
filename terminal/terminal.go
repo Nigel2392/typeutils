@@ -9,6 +9,7 @@ import (
 	"golang.org/x/term"
 )
 
+// Ask asks a question and returns the answer
 func Ask(question string, args ...any) string {
 	switch len(args) {
 	case 0:
