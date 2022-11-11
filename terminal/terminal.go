@@ -9,18 +9,45 @@ import (
 	"golang.org/x/term"
 )
 
-func Ask(question string, allowempty ...bool) string {
+func Ask(question string, args ...any) string {
+	switch len(args) {
+	case 0:
+		return ask(question)
+	case 1:
+		if args[0].(bool) {
+			answer := ask(question)
+			if answer == "" {
+				return Ask(question, args...)
+			}
+			return answer
+		} else {
+			return ask(question)
+		}
+	case 2:
+		canBeEmpty := args[0].(bool)
+		errmsg := args[1].(string)
+		answer := ask(question)
+		if answer == "" {
+			if canBeEmpty {
+				return answer
+			} else {
+				fmt.Println(errmsg)
+				return Ask(question, args...)
+			}
+		} else {
+			return answer
+		}
+	}
+	return ""
+}
+
+func ask(question string) string {
 	var input string
 	fmt.Print(question)
 	// Scan until enter is pressed
 	std := bufio.NewScanner(os.Stdin)
 	std.Scan()
 	input = std.Text()
-	if len(allowempty) > 0 && allowempty[0] {
-		return input
-	} else if len(allowempty) > 0 && !allowempty[0] && input == "" {
-		return Ask(question)
-	}
 	return input
 }
 
