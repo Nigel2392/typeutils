@@ -20,18 +20,18 @@ func Ask(question string, args ...any) string {
 			answer := ask(question)
 			if answer == "" {
 				return Ask(question, args...)
-			} else if strings.EqualFold(answer, "exit") {
-				os.Exit(0)
-			}
+			} //else if strings.EqualFold(answer, "exit") {
+			// 	os.Exit(0)
+			// }
 			return answer
 		} else {
 			q := ask(question)
 			// If the answer is empty, ask again
 			// If the answer is exit, exit the program
-			switch q {
-			case "exit":
-				os.Exit(0)
-			}
+			// switch q {
+			// case "exit":
+			// os.Exit(0)
+			// }
 			return q
 		}
 	case 2:
@@ -43,10 +43,10 @@ func Ask(question string, args ...any) string {
 		answer := ask(question)
 		// If the answer is empty, ask again
 		// If the answer is exit, exit the program
-		switch question {
-		case "exit":
-			os.Exit(0)
-		}
+		// switch question {
+		// case "exit":
+		// os.Exit(0)
+		// }
 		if answer == "" {
 			if canBeEmpty {
 				return answer
