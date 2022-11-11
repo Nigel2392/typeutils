@@ -35,6 +35,9 @@ func Ask(question string, args ...any) string {
 			return q
 		}
 	case 2:
+		// Two arguments provided, has to be string and bool
+		// If the answer is empty, ask again when the first argument is true
+		// Second argument is the errormessage to print to the user.
 		canBeEmpty := args[0].(bool)
 		errmsg := args[1].(string)
 		answer := ask(question)
