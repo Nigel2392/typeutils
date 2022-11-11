@@ -15,6 +15,7 @@ func Ask(question string, args ...any) string {
 	case 0:
 		return ask(question)
 	case 1:
+		// One argument provided, has to be bool.
 		if args[0].(bool) {
 			answer := ask(question)
 			if answer == "" {
