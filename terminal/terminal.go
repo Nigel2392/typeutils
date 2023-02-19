@@ -10,6 +10,13 @@ import (
 )
 
 // Ask asks a question and returns the answer
+// Arguments:
+//
+//	question: The question to ask
+//	args: Optional arguments (
+//		1. bool: If the answer can be empty
+//		2. string: The error message to print when the answer is empty
+//	)
 func Ask(question string, args ...any) string {
 	switch len(args) {
 	case 0:
@@ -76,7 +83,11 @@ func AskProtected(question string) string {
 	fmt.Print(question)
 	bytePassword, _ := term.ReadPassword(int(os.Stdin.Fd()))
 	fmt.Println()
-	return string(bytePassword)
+	var s = string(bytePassword)
+	if s == "" {
+		return AskProtected(question)
+	}
+	return s
 }
 
 func RepeatAsk(question string, validAnswers []string, cancel bool) (string, error) {
